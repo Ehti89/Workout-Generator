@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pre-generated workouts</title>
+    <h1 class="page-title">Pre-Generated Workout Plans</h1>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    <!-- Stylesheet -->
+    <style>
+        /* Style for the title */ 
+        .page-title { 
+            text-align: center; /* Center align title */ 
+            color: #ffffff; /* Light text color */ 
+            margin-top: 150px; /* Space below the fixed header */ 
+            margin-bottom: 1em; /* Space below the title */ 
+            font-size: 2em; /* Font size */ 
+            font-weight: bold; /* Font weight */ 
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            border: none;
+            outline: none;
+            font-family: "Poppins", sans-serif;
+            background-color: #1a1a1a; /* Dark background */
+            color: #ffffff; /* Light text color */
+        }
+
+        .wrapper {
+            width: 95%;
+            margin: 0 auto;
+        }
+
+        #search-container {
+            margin: 2em 0;
+            text-align: left; /* Align search container to the left */
+            margin-top: 50px; /* Space below the fixed header */
+            width: 60%;  
+        }
+
+        #search-container input {
+            background-color: #333333; /* Dark input background */
+            border: 2px solid #4CAF50;
+            width: 80%;
+            padding: 1em 0.3em;
+            border-radius: 5px; /* Rounded corners */
+            color: #ffffff; /* Light input text color */
+        }
+
+        #search-container input:focus {
+            border-color: #4CAF50; /* Green border on focus */
+        }
+
+        #search-container button {
+            padding: 1em 2em;
+            margin-left: 1em;
+            background-color: #4CAF50; /* Green button background */
+            color: #ffffff;
+            border-radius: 5px;
+            margin-top: 0.5em;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #search-container button:hover {
+            background-color: #45a049; /* Slightly darker green on hover */
+        }
+
+        .button-value {
+            border: 2px solid #4CAF50; /* Green border */
+            padding: 1em 2.2em;
+            border-radius: 3em;
+            background-color: transparent;
+            color: #4CAF50;
+            cursor: pointer;
+            margin: 0.5em; /* Space between buttons */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .button-value:hover {
+            background-color: #4CAF50; /* Green background on hover */
+            color: #ffffff; /* Light text on hover */
+        }
+
+        .active {
+            background-color: #4CAF50; /* Green background */
+            color: #ffffff;
+        }
+
+        .card {
+            background-color: #2a2a2a; /* Dark card background */
+            width: 100%;
+            padding: 1em;
+            border-radius: 5px;
+            box-shadow: 1em 2em 2.5em rgba(0, 0, 0, 0.2); /* Soft shadow */
+            transition: transform 0.3s ease; /* Smooth transform */
+            cursor: pointer; /* Indicate that the card is clickable */
+            margin: 1em 0; /* Space between cards */
+            animation: slideDown 1s ease; /* Apply slide-down animation */
+        }
+
+        .card:hover {
+            transform: translateY(-10px); /* Lift card on hover */
+        }
+
+        .card .container {
+            padding: 0; /* Remove container padding */
+        }
+
+        .card .container h2 {
+            margin: 0; /* Remove top and bottom margin */
+            padding: 0; /* Remove padding */
+            font-weight: 500; /* Ensuring a neat look */
+        }
+
+        .image-container {
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            object-fit: contain;
+            height: 15em;
+            border-radius: 5px; /* Rounded image corners */
+        }
+
+        .container h5 {
+            font-weight: 500;
+        }
+
+        .dropdown-content {
+            display: none;
+            background-color: #2a2a2a; /* Dark background */
+            color: #ffffff; /* Light text color */
+            padding: 1em;
+            margin-top: 1em;
+            width: 98%;
+            border-radius: 5px;
+            box-shadow: 1em 2em 2.5em rgba(0, 0, 0, 0.2); /* Soft shadow */
+            position: relative; /* Ensure it overlays other content */ 
+            z-index: 1; /* Ensure it stays above other elements */
+            animation: slideDown 1.5s ease; /* Apply slide-down animation */
+            padding-bottom: 3em; /* Space for the button at the bottom */
+        }
+
+        /* Save button style to fit within dropdown content */
+        .dropdown-content .save-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 0.5em 1em;
+            background-color: #4CAF50; /* Green background */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-content .save-button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        @media screen and (max-width: 720px) {
+            img {
+                max-width: 100%;
+                object-fit: contain;
+                height: 10em;
+            }
+            .card {
+                max-width: 100%;
+                margin-top: 1em;
+            }
+            #workouts {
+                grid-template-columns: auto auto;
+                grid-gap: 1em;
+            }
+        }
+
+        /* Added styles for header, logo, and sidebar */
+        .header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #111;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            z-index: 1; 
+        }
+
+        .logo {
+            width: 65px;
+            height: 65px;
+            animation: fadeIn 1.5s forwards 0.5s;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            flex-grow: 1;
+            margin-left: 150px;
+            margin-right: 350px;
+            transition: transform 0.5s ease;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.25em;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #4CAF50;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 2; /* Ensure it stays above other content */
+            top: 0;
+            right: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a.user-link {
+            font-size: 25px;
+            color: white;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            left: 25px;
+            font-size: 36px;
+            margin-left: 0;
+        }
+
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 2;
+        }
+
+        .openbtn:hover {
+            background-color: #444;
+        }
+
+        /* Keyframe animation for sliding down */
+        @keyframes slideDown { 
+            from { 
+                transform: translateY(-20px); 
+                opacity: 0; 
+            } 
+            to { 
+                transform: translateY(0); 
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+    <body>
+        <!-- Header, logo, and sidebar -->
+        <div class="header-container">
+            <a href="#" id="logo-link">
+                <img src="https://i.postimg.cc/HxhYry87/videoframe-1903.png" alt="Logo" class="logo">
+            </a>
+            <button class="openbtn" onclick="openNav()">☰</button>
+        </div>
+
+        <div id="mySidebar" class="sidebar">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="{{ url_for('user_info') }}" class="user-link">Profile</a>
+            <a href="{{ url_for('homepage') }}" class="user-link">Home</a>
+            <a href="{{ url_for('generated') }}" class="user-link">Pre-generated workouts</a>
+            <a href="{{ url_for('custom') }}" class="user-link">Custom workouts</a>
+            <a href="{{ url_for('logout') }}" class="user-link">Logout</a>
+        </div>
+
+        <!-- Original content -->
+        <div class="wrapper">
+            <div id="search-container">
+                <input type="search" id="search-input" placeholder="Search workout type here.." />
+                <button id="search">Search</button>
+            </div>
+            <div id="workouts"></div>
+        </div>
+
+
+
+    <!-- Scripts -->
+        <script>
+function openNav() {
+    document.getElementById("mySidebar").style.width = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+}
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const logoLink = document.getElementById('logo-link');
+                const sidebarLinks = document.querySelectorAll('.sidebar a.user-link');
+                sidebarLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        window.location.href = link.href;
+                    });
+                });
+
+                const otherLinks = document.querySelectorAll('.sidebar a:not(.user-link), nav a');
+                otherLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const target = link.getAttribute('data-target');
+                        navigateToPage(target);
+                    });
+                });
+
+                const pages = document.querySelectorAll('.page');
+                const navigateToPage = (target) => {
+                    pages.forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    const targetPage = document.getElementById(target);
+                    if (targetPage) {
+                        targetPage.classList.add('active');
+                    } else {
+                        console.error(`Page with ID "${target}" not found.`);
+                    }
+                    closeNav(); // Close the sidebar after navigation
+                };
+
+                logoLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = '/homepage';
+                });
+            });
+
+            
+            document.addEventListener('DOMContentLoaded', () => {
+                // Ensure the DOM is fully loaded
+
+                // Script for the workout cards and dropdown functionality
+                let workouts = {
+                    data: [
+                        {
+                            workoutsName: "Cardio",
+                            category: "cardio",
+                            image: "https://example.com/path/to/cardio.jpg",
+                            info: "Cardio workouts are great for improving cardiovascular health and burning calories."
+                        },
+                        {
+                            workoutsName: "Olympic Weightlifting",
+                            category: "olympic_weightlifting",
+                            image: "https://example.com/path/to/olympic_weightlifting.jpg",
+                            info: "Olympic weightlifting involves lifts like the snatch and the clean and jerk."
+                        },
+                        {
+                            workoutsName: "Plyometrics",
+                            category: "plyometrics",
+                            image: "https://example.com/path/to/plyometrics.jpg",
+                            info: "Plyometrics are exercises that involve explosive movements to improve power."
+                        },
+                        {
+                            workoutsName: "Strength",
+                            category: "strength",
+                            image: "https://example.com/path/to/strength.jpg",
+                            info: "Strength workouts focus on building muscle mass and improving overall strength."
+                        },
+                        {
+                            workoutsName: "Powerlifting",
+                            category: "powerlifting",
+                            image: "https://example.com/path/to/powerlifting.jpg",
+                            info: "Powerlifting includes the squat, bench press, and deadlift for maximal strength."
+                        },
+                        {
+                            workoutsName: "Stretching",
+                            category: "stretching",
+                            image: "https://example.com/path/to/stretching.jpg",
+                            info: "Stretching exercises improve flexibility and reduce the risk of injury."
+                        },
+                        {
+                            workoutsName: "Strongman",
+                            category: "strongman",
+                            image: "https://example.com/path/to/strongman.jpg",
+                            info: "Strongman training involves lifting, pulling, and carrying heavy objects."
+                        },
+                    ],
+                };
+
+                for (let i of workouts.data) {
+                    // Create Card
+                    let card = document.createElement("div");
+                    card.classList.add("card", i.category);
+
+                    // Image div
+                    let imgContainer = document.createElement("div");
+                    imgContainer.classList.add("image-container");
+
+                    // Img tag
+                    let image = document.createElement("img");
+                    image.setAttribute("src", i.image);
+                    imgContainer.appendChild(image);
+                    card.appendChild(imgContainer);
+
+                    // Container
+                    let container = document.createElement("div");
+                    container.classList.add("container");
+
+                    // Workout name
+                    let name = document.createElement("h5");
+                    name.classList.add("workout-name");
+                    name.innerText = i.workoutsName.toUpperCase();
+                    container.appendChild(name);
+
+                    // Dropdown content
+                    let dropdown = document.createElement("div");
+                    dropdown.classList.add("dropdown-content");
+                    dropdown.innerText = i.info;
+                    container.appendChild(dropdown);
+
+                    // Add the save button
+                    let saveButton = document.createElement("button");
+                    saveButton.classList.add("save-button");
+                    saveButton.textContent = "save";
+                    dropdown.appendChild(saveButton);
+
+                    card.appendChild(container);
+                    document.getElementById("workouts").appendChild(card);
+
+            // Add click event to the card, but prevent it from interfering with button clicks
+            card.addEventListener("click", (event) => {
+                if (event.target.tagName !== 'BUTTON') {
+                    dropdown.classList.toggle("show");
+                }
+            });
+
+            // Add click event to the save button directly
+            saveButton.addEventListener('click', (event) => {
+                event.stopPropagation();  // Prevent event from bubbling up to the card
+                const dropdownContent = dropdown.innerText;
+
+                if (dropdownContent) {
+                    // Create a form to submit the content
+                    let form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/UserInformation';
+
+                    let input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'content';
+                    input.value = dropdownContent;
+                    form.appendChild(input,workouts);
+
+                    document.body.appendChild(form);
+
+                    // Log to console for debugging
+                    console.log('Form created with content:', input.value);
+
+                    // Submit the form
+                    form.submit();
+                    console.log('Form submitted');
+                } else {
+                    alert('No content to save');
+                }
+            });
+            }
+        });
+
+            function filterWorkout(value) {
+                // Button class code
+                let buttons = document.querySelectorAll(".button-value");
+                buttons.forEach((button) => {
+                    // Check if value equals innerText
+                    if (value.toUpperCase() == button.innerText.toUpperCase()) {
+                        button.classList.add("active");
+                    } else {
+                        button.classList.remove("active");
+                    }
+                });
+
+                // Select all cards
+                let elements = document.querySelectorAll(".card");
+                // Loop through all cards
+                elements.forEach((element) => {
+                    // Display all cards on 'all' button click
+                    if (value == "all") {
+                        element.classList.remove("hide");
+                    } else {
+                        // Check if element contains category class
+                        if (element.classList.contains(value)) {
+                            // Display element based on category
+                            element.classList.remove("hide");
+                        } else {
+                            // Hide other elements
+                            element.classList.add("hide");
+                        }
+                    }
+                });
+            }
+
+            // Search button click
+            document.getElementById("search").addEventListener("click", () => {
+                // Initializations
+                let searchInput = document.getElementById("search-input").value.toUpperCase();
+                let elements = document.querySelectorAll(".workout-name");
+                let cards = document.querySelectorAll(".card");
+
+                // Loop through all elements
+                elements.forEach((element, index) => {
+                    // Check if text includes the search value
+                    if (element.innerText.includes(searchInput)) {
+                        // Display matching cards
+                        cards[index].classList.remove("hide");
+                    } else {
+                        // Hide others
+                        cards[index].classList.add("hide");
+                    }
+                });
+            });
+            // Initially display all workouts
+            window.onload = () => {
+                filterWorkout("all");
+            };
+
+      </script>
+       </body>
+       </html>
+
