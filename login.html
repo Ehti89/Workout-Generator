@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <style>
+        .flash {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .flash-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .flash-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .flash-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Login Page</h1>
+    </header>
+
+    <!-- Display flashed messages if any -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Login Form -->
+    <form action="{{ url_for('login') }}" method="POST">
+        <p>Email:</p>
+        <p><input type="email" name="email" placeholder="Enter email" value="" /></p>
+        <p>Password:</p>
+        <p><input type="password" name="password" placeholder="Enter password" value="" /></p>
+        <p><input type="submit" value="Submit" /></p>
+    </form>
+</body>
+</html>
