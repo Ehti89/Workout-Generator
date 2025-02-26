@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: black; /* Plain black background */
+        margin: 0;
+        padding: 0;
+        color: white;
+        min-height: 100vh; /* Ensure body height */
+    }
+
+    .header-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        background: #111; /* Background for the header */
+        z-index: 1; /* Ensure header is above other content */
+    }
+
+    .logo {
+        width: 65px;
+        height: 65px;
+        margin-right: 15px;
+    }
+
+    .header {
+        font-size: 2em;
+        font-weight: bold;
+        color: #4CAF50; /* Change text color to green */
+    }
+
+    .container {
+        margin-top: 140px; /* Adjust margin to account for fixed header */
+        display: flex;
+        flex-direction: column; /* Ensure vertical alignment */
+        justify-content: center;
+        width: 100%;
+    }
+
+    .title-container {
+        margin-top: 20px; /* Adjust margin to place container just under the title */
+        text-align: center;
+        margin-left: 20px; /* Move the title to the right */
+    }
+
+    .title {
+        font-size: 2em;
+        font-weight: bold;
+        color: #4CAF50; /* Change text color to green */
+    }
+
+    .info-box {
+        width: 95%; /* Make the user info box smaller */
+        border: 1px solid #4CAF50; /* Change border color to green */
+        padding: 20px;
+        margin: 10px auto; /* Center the box */
+        background-color: #222;
+        color: #4CAF50; /* Change text color to green */
+    }
+
+    h1 {
+        color: #4CAF50; /* Change heading color to green */
+        margin-left: 20px;
+        font-size: 1.8em;
+        margin-bottom: 10px;
+    }
+
+    h2 {
+        color: #4CAF50; /* Change heading color to green */
+        font-size: 1.3em;
+        margin-bottom: 10px;
+    }
+        
+    .info {
+        font-size: 1.2em;
+        text-align: left;
+        margin: 10px 0;
+    }
+
+    .hidden-password {
+        display: none;
+    }
+
+    .verify-form {
+        display: none;
+        margin-top: 20px;
+    }
+
+    .verify-form input, 
+    .verify-form button, 
+    .editable-password input, 
+    .editable-password button {
+        font-size: 1em;
+        padding: 5px;
+        margin: 5px 0;
+        background-color: #4CAF50;
+        color: black;
+        border: none;
+        border-radius: 3px;
+    }
+
+    .show-verify-form, 
+    .edit-password-form {
+        background-color: #4CAF50;
+        color: black;
+        border: none;
+        border-radius: 3px;
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+    }
+
+    .show-verify-form:hover, 
+    .edit-password-form:hover {
+        background-color: #45a049;
+    }
+
+    .sidebar {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+    }
+
+    .sidebar a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 20px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+    }
+
+    .sidebar a.user-link {
+        font-size: 25px;
+        color: white;
+    }
+
+    .sidebar a:hover {
+        color: #f1f1f1;
+    }
+
+    .sidebar .closebtn {
+        position: absolute;
+        top: 0;
+        left: 25px;
+        font-size: 36px;
+        margin-left: 0;
+    }
+
+    .openbtn {
+        font-size: 20px;
+        cursor: pointer;
+        background-color: #111;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        z-index: 2;
+    }
+
+    .openbtn:hover {
+        background-color: #444;
+    }
+
+    .card {
+        background-color: #2a2a2a; /* Dark card background */
+        width: 90%; /* Make cards smaller */
+        padding: 0.5em;
+        border-radius: 5px;
+        box-shadow: 1em 2em 2.5em rgba(0, 0, 0, 0.2); /* Soft shadow */
+        transition: transform 0.5s ease; /* Smooth transform */
+        cursor: pointer; /* Indicate that the card is clickable */
+        margin: 1em auto; /* Center the cards */
+        animation: slideDown 1s ease; /* Apply slide-down animation */
+    }
+
+    .card:hover {
+        transform: translateY(-10px); /* Lift card on hover */
+    }
+
+    .image-container {
+        text-align: center;
+    }
+
+    img {
+        max-width: 100%;
+        object-fit: contain;
+        height: 15em;
+        border-radius: 5px; /* Rounded image corners */
+    }
+
+    .container h5 {
+        font-weight: 500;
+    }
+
+    .dropdown-content {
+        display: none;
+        background-color: #2a2a2a; /* Dark background */
+        color: #ffffff; /* Light text color */
+        padding: 1em;
+        margin-top: 1em;
+        width: 98%;
+        border-radius: 5px;
+        box-shadow: 1em 2em 2.5em rgba(0, 0, 0, 0.2); /* Soft shadow */
+        position: relative; /* Ensure it overlays other content */ 
+        z-index: 1; /* Ensure it stays above other elements */
+        animation: slideDown 1.5s ease; /* Apply slide-down animation */
+        padding-bottom: 3em; /* Space for the button at the bottom */
+    }
+
+    .dropdown-content.show {
+        display: block;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    @media screen and (max-width: 720px) {
+        img {
+            max-width: 100%;
+            object-fit: contain;
+            height: 10em;
+        }
+        .card {
+            max-width: 100%;
+        }
+        #workouts {
+            grid-template-columns: auto auto;
+            grid-gap: 2em;
+        }
+    }
+    </style>
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoLink = document.getElementById('logo-link');
+            const sidebarLinks = document.querySelectorAll('.sidebar a.user-link');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    window.location.href = link.href;
+                });
+            });
+
+            const otherLinks = document.querySelectorAll('.sidebar a:not(.user-link), nav a');
+            otherLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = link.getAttribute('data-target');
+                    navigateToPage(target);
+                });
+            });
+
+            const pages = document.querySelectorAll('.page');
+            const navigateToPage = (target) => {
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                const targetPage = document.getElementById(target);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                } else {
+                    console.error(`Page with ID "${target}" not found.`);
+                }
+                closeNav(); // Close the sidebar after navigation
+            };
+
+            logoLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = '/homepage';
+            });
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const workoutCards = document.querySelectorAll('.card');
+                workoutCards.forEach(card => {
+                    const dropdown = card.querySelector('.dropdown-content');
+                    card.addEventListener('click', (event) => {
+                        if (event.target.tagName !== 'BUTTON') {
+                            dropdown.classList.toggle("show");
+                        }
+                    });
+                });
+            });
+
+          function showVerifyForm() {
+              document.getElementById("verify-form").style.display = "block";
+              document.getElementById("show-verify-button").style.display = "none";
+          }
+
+          function verifyPassword() {
+              const enteredPassword = document.getElementById("verify-password").value;
+              const actualPassword = "{{ password }}"; // You can pass the password to the script securely
+
+              if (enteredPassword === actualPassword) {
+                  document.getElementById("hidden-password").style.display = "block";
+                  document.getElementById("verify-form").style.display = "none";
+                  document.getElementById("edit-password-button").style.display = "block";
+              } else {
+                  alert("Incorrect password. Please try again.");
+              }
+          }
+
+          function showEditPasswordForm() {
+              document.getElementById("hidden-password").style.display = "none";
+              document.getElementById("edit-password-form").style.display = "block";
+          }
+
+    </script>
+
+    <body>
+        <div class="header-container">
+            <a href="{{ url_for('homepage') }}" id="logo-link">
+                <img src="https://i.postimg.cc/HxhYry87/videoframe-1903.png" alt="Logo" class="logo">
+            </a>
+            <button class="openbtn" onclick="openNav()">☰</button>
+        </div>
+        <div id="mySidebar" class="sidebar">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="{{ url_for('user_info') }}" class="user-link">Profile</a>
+            <a href="{{ url_for('homepage') }}" class="user-link">Home</a>
+            <a href="{{ url_for('generated') }}" class="user-link">Pre-generated workouts</a>
+            <a href="{{ url_for('custom') }}" class="user-link">Custom workouts</a>
+            <a href="{{ url_for('logout') }}" class="user-link">Logout</a>
+        </div>
+        <div class="container">
+            <h1>User Information</h1>
+            <div class="info-box">
+                <div class="info">
+                    <h1>Email</h1>
+                    <p>{{ email }}</p>
+                    <h1>Password</h1>
+                    <div id="hidden-password" class="hidden-password">
+                        <p>{{ password }}</p>
+                    </div>
+                    <div id="verify-form" class="verify-form">
+                        <input type="password" id="verify-password" placeholder="Enter your password">
+                        <button onclick="verifyPassword()">Verify</button>
+                    </div>
+                    <button id="show-verify-button" class="show-verify-form" onclick="showVerifyForm()">View Password</button>
+                    <button id="edit-password-button" class="edit-password-form" onclick="showEditPasswordForm()" style="display:none;">Edit Password</button>
+                    <form id="edit-password-form" class="editable-password" style="display:none;">
+                        <input type="password" id="new-password" placeholder="Enter new password">
+                        <p><button type="submit">Submit</button></p>
+                    </form>
+                </div>
+            </div>
+            <div>
+                <h1>Saved Workouts:</h1>
+                <div id="saved-workouts" class="info">
+                    {% for workout in workouts %}
+                    <div class="card">
+                        <div class="container">
+                            <h2>Workout Category: {{ workout.workouts }}</h2>
+                            <div class="dropdown-content">
+                                <p>{{ workout.content }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+</body>
+</html>
