@@ -1,0 +1,243 @@
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Virtual Training Assistant</title>
+            <style>
+                body {
+                    font-family: 'Arial', sans-serif;
+                    background-color: black;
+                    margin: 0;
+                    padding: 0;
+                    color: white;
+                    min-height: 100vh;
+                    text-align: left;
+                    overflow: hidden;
+                }
+                html { 
+                    scroll-behavior: smooth;
+                }
+                .header-container {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    background: #111;
+                    padding: 15px 20px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    z-index: 1;
+                }
+                .logo {
+                    width: 65px;
+                    height: 65px;
+                    opacity: 0;
+                    animation: fadeIn 1.5s forwards 0.5s;
+                }
+                nav {
+                    display: flex;
+                    justify-content: space-between;
+                    flex-grow: 1;
+                    margin-left: 150px;
+                    margin-right: 350px;
+                    transition: transform 0.5s ease;
+                }
+                nav a {
+                    color: white;
+                    text-decoration: none;
+                    font-size: 1.25em;
+                    font-weight: bold;
+                    transition: color 0.3s ease;
+                }
+                nav a:hover {
+                    color: #4CAF50;
+                }
+                .sidebar {
+                    height: 100%;
+                    width: 0;
+                    position: fixed;
+                    z-index: 1;
+                    top: 0;
+                    right: 0;
+                    background-color: #111;
+                    overflow-x: hidden;
+                    transition: 0.5s;
+                    padding-top: 60px;
+                }
+                .sidebar a {
+                    padding: 8px 8px 8px 32px;
+                    text-decoration: none;
+                    font-size: 20px;
+                    color: #818181;
+                    display: block;
+                    transition: 0.3s;
+                }
+                .sidebar a.user-link {
+                    font-size: 25px;
+                    color: white;
+                }
+                .sidebar a:hover {
+                    color: #f1f1f1;
+                }
+                .sidebar .closebtn {
+                    position: absolute;
+                    top: 0;
+                    left: 25px;
+                    font-size: 36px;
+                    margin-left: 0;
+                }
+                .openbtn {
+                    font-size: 20px;
+                    cursor: pointer;
+                    background-color: #111;
+                    color: white;
+                    padding: 10px 15px;
+                    border: none;
+                    position: fixed;
+                    top: 15px;
+                    right: 15px;
+                    z-index: 2;
+                }
+                .openbtn:hover {
+                    background-color: #444;
+                }
+                .page {
+                    width: 100%;
+                    height: 100vh;
+                    position: fixed;
+                    top: 0;
+                    left: 100%;
+                    transition: left 0.5s ease;
+                }
+                .page.active {
+                    left: 0;
+                }
+                .page-title {
+                    margin-top: 100px;
+                    text-align: center;
+                }
+                .redirect-button {
+                    display: block;
+                    width: 150px;
+                    margin: 20px auto;
+                    padding: 10px 0;
+                    font-size: 1em;
+                    color: white;
+                    background-color: #4CAF50;
+                    border: none;
+                    border-radius: 5px;
+                    text-align: center;
+                    text-decoration: none;
+                    position: absolute;
+                    bottom: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
+                .redirect-button:hover {
+                    background-color: #45a049;
+                }
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                    }
+                    to {
+                        opacity: 1;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header-container">
+                <a href="#" id="logo-link">
+                    <img src="https://i.postimg.cc/HxhYry87/videoframe-1903.png" alt="Logo" class="logo">
+                </a>
+                <nav>
+                    <a href="#" data-target="generated">Pre-generated workouts</a>
+                    <a href="#" data-target="custom">Custom workouts</a>
+                </nav>
+                <button class="openbtn" onclick="openNav()">☰</button>
+            </div>
+
+            <div id="mySidebar" class="sidebar">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="{{ url_for('user_info') }}" class="user-link">Profile</a>
+                <a href="#" data-target="homepage">Home</a>
+                <a href="#" data-target="generated">Pre-generated workouts</a>
+                <a href="#" data-target="custom">Custom workouts</a>
+                <a href="{{ url_for('logout') }}" class="user-link">Logout</a>
+            </div>
+
+            <div id="homepage" class="page">
+                <h1 class="page-title">Le Homepage</h1>
+            <div id="generated" class="page">
+                <h1 class="page-title">Pre-generated Workouts</h1>
+                <p>Welcome to the Pre-generated Workouts page! Here, you will find a variety of workout plans tailored to different fitness levels and goals. Whether you're a beginner looking to start your fitness journey or an experienced athlete seeking new challenges, we've got something for everyone.</p>
+                <p>Our pre-generated workouts are designed by fitness experts to help you achieve your goals efficiently and effectively. You can expect:</p>
+                <ul>
+                    <li>Structured plans targeting different muscle groups</li>
+                    <li>Diverse exercises to keep things interesting</li>
+                    <li>Guidance on proper form and technique</li>
+                    <li>Progress tracking to monitor your improvements</li>
+                </ul>
+                <a href="{{ url_for('generated') }}" class="redirect-button">Pre-generated Workouts</a>
+            </div>
+
+            <div id="custom" class="page">
+                <h1 class="page-title">Custom Workouts</h1>
+                <a href="{{ url_for('custom') }}" class="redirect-button">Custom Workouts</a>
+            </div>
+
+
+
+                        <script>
+                function openNav() {
+                    document.getElementById("mySidebar").style.width = "250px";
+                }
+
+                function closeNav() {
+                    document.getElementById("mySidebar").style.width = "0";
+                }
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    const logoLink = document.getElementById('logo-link');
+                    const sidebarLinks = document.querySelectorAll('.sidebar a.user-link');
+                    sidebarLinks.forEach(link => {
+                        link.addEventListener('click', () => {
+                            window.location.href = link.href;
+                        });
+                    });
+
+                    const otherLinks = document.querySelectorAll('.sidebar a:not(.user-link), nav a');
+                    otherLinks.forEach(link => {
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const target = link.getAttribute('data-target');
+                            navigateToPage(target);
+                        });
+                    });
+
+                    const pages = document.querySelectorAll('.page');
+                    const navigateToPage = (target) => {
+                        pages.forEach(page => {
+                            page.classList.remove('active');
+                        });
+                        const targetPage = document.getElementById(target);
+                        if (targetPage) {
+                            targetPage.classList.add('active');
+                        } else {
+                            console.error(`Page with ID "${target}" not found.`);
+                        }
+                        closeNav(); // Close the sidebar after navigation
+                    };
+
+                    logoLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        navigateToPage('homepage')
+                    
+                    });
+                });
+                        </script>
+        </body>
+        </html>
