@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Workout Plans</title>
+    <h1 class="page-title">Custom Workout Plans</h1>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    <!-- Stylesheet -->
+    <style>
+        /* Style for the title */ 
+        .page-title { 
+            text-align: center; /* Center align title */ 
+            color: #ffffff; /* Light text color */ 
+            margin-top: 150px; /* Space below the fixed header */ 
+            margin-bottom: 1em; /* Space below the title */ 
+            font-size: 2em; /* Font size */ 
+            font-weight: bold; /* Font weight */ 
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            border: none;
+            outline: none;
+            font-family: "Poppins", sans-serif;
+            background-color: #1a1a1a; /* Dark background */
+            color: #ffffff; /* Light text color */
+        }
+        .header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #111;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            z-index: 1; 
+        }
+
+        .logo {
+            width: 65px;
+            height: 65px;
+            animation: fadeIn 1.5s forwards 0.5s;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            flex-grow: 1;
+            margin-left: 150px;
+            margin-right: 350px;
+            transition: transform 0.5s ease;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.25em;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #4CAF50;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 2; /* Ensure it stays above other content */
+            top: 0;
+            right: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a.user-link {
+            font-size: 25px;
+            color: white;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            left: 25px;
+            font-size: 36px;
+            margin-left: 0;
+        }
+
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 2;
+        }
+
+        .openbtn:hover {
+            background-color: #444;
+        }
+
+        /* Keyframe animation for sliding down */
+        @keyframes slideDown { 
+            from { 
+                transform: translateY(-20px); 
+                opacity: 0; 
+            } 
+            to { 
+                transform: translateY(0); 
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .container {
+                width: 95%; /* Make the user info box smaller */
+                border: 1px solid #4CAF50; /* Change border color to green */
+                padding: 20px;
+                margin: 10px auto; /* Center the box */
+                background-color: #222;
+                color: #4CAF50; /* Change text color to green */
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-left: 5%;
+            margin-top: 20px; /* Space below the title */
+        }
+
+        .options-container select {
+            background-color: #333333; /* Dark background */
+            color: white;
+            padding: 10px;
+            border: 1px solid #4CAF50; /* Green border */
+            border-radius: 5px;
+            margin-bottom: 10px; /* Space between dropdowns */
+        }
+
+        .options-container button {
+            background-color: #4CAF50; /* Green background */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .options-container button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+
+    </style>
+</head>
+<body>
+    <body>
+        <!-- Header, logo, and sidebar -->
+        <div class="header-container">
+            <a href="#" id="logo-link">
+                <img src="https://i.postimg.cc/HxhYry87/videoframe-1903.png" alt="Logo" class="logo">
+            </a>
+            <button class="openbtn" onclick="openNav()">☰</button>
+        </div>
+
+        <div id="mySidebar" class="sidebar">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="{{ url_for('user_info') }}" class="user-link">Profile</a>
+            <a href="{{ url_for('homepage') }}" class="user-link">Home</a>
+            <a href="{{ url_for('generated') }}" class="user-link">Pre-generated workouts</a>
+            <a href="{{ url_for('custom') }}" class="user-link">Custom workouts</a>
+            <a href="{{ url_for('logout') }}" class="user-link">Logout</a>
+        </div>
+        <div class="container"
+        <div class="options-container">
+            <select>
+                <option value="" disabled selected>Goals</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+            </select>
+            <select>
+                <option value="" disabled selected>Gender</option>
+                <option value="option1">Male</option>
+                <option value="option2">Female</option>
+            </select>
+            <button type="button">Submit</button>
+        </div>
+        </div>
+
+    
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoLink = document.getElementById('logo-link');
+            const sidebarLinks = document.querySelectorAll('.sidebar a.user-link');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    window.location.href = link.href;
+                });
+            });
+
+            const otherLinks = document.querySelectorAll('.sidebar a:not(.user-link), nav a');
+            otherLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = link.getAttribute('data-target');
+                    navigateToPage(target);
+                });
+            });
+
+            const pages = document.querySelectorAll('.page');
+            const navigateToPage = (target) => {
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                const targetPage = document.getElementById(target);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                } else {
+                    console.error(`Page with ID "${target}" not found.`);
+                }
+                closeNav(); // Close the sidebar after navigation
+            };
+
+            logoLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = '/homepage';
+            });
+        });
+    </script>
+</body>
+</html>
